@@ -1,6 +1,10 @@
 function [sub, preprocessedData, idxsub] = EEanalysis_default(filename, opt_sub, opt_game_sublevel, opt_analysis_sub, savedir, saveprefix)
-    disp(sprintf('ANALYZING file - %s', filename));
-    rawdata = readtable(filename, 'Delimiter', ",");
+    if ischar(filename)
+        disp(sprintf('ANALYZING file - %s', filename));
+        rawdata = readtable(filename, 'Delimiter', ",");
+    else
+        rawdata = filename;
+    end
     preprocessedData = EEpreprocess_game_basic(rawdata);
     idxsub = ANALYSIS_subjectselection(preprocessedData, opt_sub);
     EEpreprocess_game_subjectdependent = @(games, idxsub, options)ANALYSIS_game_subjectdependent(games, idxsub, options, {'repeatedgame'}, {'EEpreprocess_game_sub_repeatedgame'});

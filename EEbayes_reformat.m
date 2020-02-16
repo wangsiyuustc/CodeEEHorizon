@@ -15,9 +15,9 @@ function bayesdata = EEbayes_reformat(data, idxsub, modelname, maxtrial)
                 gd = data(idxsub{si},:);
                 nT = min(size(gd,1), LEN);
                 bayesdata.nTrial(si,1) = nT;
-                bayesdata.horizon(si,:) = tool_extendnan(ceil(gd.cond_horizon'/5), LEN);
-                bayesdata.dI(si,:) = tool_extendnan(gd.dI',LEN);
-                bayesdata.choice(si,:) = tool_extendnan((gd.choice(:,5)' == 2) + 0, LEN);
+                bayesdata.horizon(si,:) = tool_extendnan(ceil(gd.cond_horizon'/5), LEN); % 1 is short, 2 is long
+                bayesdata.dI(si,:) = tool_extendnan(gd.dI',LEN); % -1, 0, 1
+                bayesdata.choice(si,:) = tool_extendnan((gd.choice(:,5)' == 2) + 0, LEN); % 1 is right, 0 is left
                 bayesdata.dR(si,:) = tool_extendnan(gd.dR(:,4)',LEN);
                 [~, ~, ranking] = unique(gd.repeat_id);
                 bayesdata.nrepeatID(si,1) = max(ranking);
@@ -145,6 +145,20 @@ end
 %                     condname{(ci-1)*2 + horizoni} = sprintf('cond = %s, horizon = %d', obj.idxnlabel{ci}, horizoni*5);
 %                     bayesdata{(ci-1)*2 + horizoni} = tbayesdata;
 %                 end
+%             end
+%         case 'simplemodel'
+%             bayesdata.nHorizon = 2;
+%             bayesdata.nSubject = length(idxsub);
+%             nT = cellfun(@(x)length(x), idxsub);
+%             LEN = min(max(nT),maxtrial);
+%             for si = 1:length(idxsub)
+%                 gd = data(idxsub{si},:);
+%                 nT = min(size(gd,1), LEN);
+%                 bayesdata.nTrial(si,1) = nT;
+%                 bayesdata.horizon(si,:) = tool_extendnan(ceil(gd.cond_horizon'/5), LEN);
+%                 bayesdata.dI(si,:) = tool_extendnan(gd.dI',LEN);
+%                 bayesdata.choice(si,:) = tool_extendnan((gd.choice(:,5)' == 2) + 0, LEN);
+%                 bayesdata.dR(si,:) = tool_extendnan(gd.dR(:,4)',LEN);
 %             end
 %         case 'simplemodel'
 %             bayesdata.nHorizon = 2;
